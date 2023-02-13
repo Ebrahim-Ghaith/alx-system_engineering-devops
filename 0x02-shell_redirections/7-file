@@ -1,5 +1,4 @@
 #!/bin/bash
-touch -- "$(cat << '.'
-\*\\'"Best School"\'\\*$\?\*\*\*\*\*:).)"\n"Best School"
+touch -- "$(cat << '.'\*\\'"Best School"\'\\*$\?\*\*\*\*\*:).)"\n"Best School"
 
 
