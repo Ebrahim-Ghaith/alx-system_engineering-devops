@@ -1,4 +1,3 @@
 #!/bin/bash
-touch -- "$(cat << '.'\*\\'"Best School"\'\\*$\?\*\*\*\*\*:).)"\n"Best School"
-
+echo "Holberton School" > '\*\\'\''"Holberton School"\'\''\\*$\?\*\*\*\*\*:)'
 
