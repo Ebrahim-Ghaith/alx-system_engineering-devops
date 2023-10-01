@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
-# Displays the contents of the current directory in list format.
-#   Only displays the part of the name after the first dash. 
+# print file names without the number prefix
 
-list=$(ls)
-for i in $list; do
-  echo "$i" | cut -d '-' -f2
+for file_name in *
+do
+	echo "$file_name" | cut -d "-" -f2-
 done
