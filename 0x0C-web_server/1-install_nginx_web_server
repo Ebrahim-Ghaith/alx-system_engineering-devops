@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# install nginx web server and create html pages
-apt-get -y update
-apt-get install -y nginx
-echo "codingschool School" | sudo tee /usr/share/nginx/html/index.html
-service nginx restart
+# Installs nginx server
+apt-get update
+apt-get -y install nginx
+ufw allow 'Nginx HTTP'
+echo "Hello World!" > /var/www/html/index.html
+service nginx start
