@@ -17,7 +17,8 @@ global
         #  https://hynek.me/articles/hardening-your-web-servers-ssl-ciphers/
         # An alternative list with additional directives can be obtained from
         #  https://mozilla.github.io/server-side-tls/ssl-config-generator/?server=haproxy
-        ssl-default-bind-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:RSA+AESGCM:RSA+AES:!aNULL:!MD5:!DSS
+        ssl-default-bind-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:RSA+AESGCM:RSA+AES:\
+!aNULL:!MD5:!DSS
         ssl-default-bind-options no-sslv3
         # custom SSL options
         maxconn 2048
@@ -46,20 +47,24 @@ defaults
 
 frontend http_front
         bind *:80
-        redirect scheme https code 301 if !{ ssl_fc }
-        option forceclose
+        stats uri /haproxy?stats
+        default_backend http_back
+
+backend http_back
+	balance roundrobin
+        server 404-web-01 34.73.47.85:80 check
+        server 404-web-02 34.73.31.23:80 check
 
 frontend www-https
          bind *:443 ssl crt /etc/haproxy/certs/www.heindrickcheung.site.pem
          reqadd X-Forwarded-Proto:\ https
          acl letsencrypt-acl path_beg /.well-known/acme-challenge/
          use_backend letsencrypt-backend if letsencrypt-acl
-         default_backend www-backend
+	 default_backend www-backend
 
 backend www-backend
-        redirect scheme https if !{ ssl_fc }
-        balance roundrobin
-        server 404-web-01 34.73.47.85:80 check
+	redirect scheme https if !{ ssl_fc }
+        server 404-web-01 35.243.155.238:80 check
         server 404-web-02 34.73.31.23:80 check
 
 backend letsencrypt-backend
