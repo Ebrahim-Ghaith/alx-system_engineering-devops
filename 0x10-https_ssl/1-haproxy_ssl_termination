@@ -2,7 +2,7 @@ global
 	log /dev/log	local0
 	log /dev/log	local1 notice
 	chroot /var/lib/haproxy
-	stats socket /run/haproxy/admin.sock mode 660 level admin
+	stats socket /run/haproxy/admin.sock mode 660 level admin expose-fd listeners
 	stats timeout 30s
 	user haproxy
 	group haproxy
@@ -33,18 +33,12 @@ defaults
 	errorfile 503 /etc/haproxy/errors/503.http
 	errorfile 504 /etc/haproxy/errors/504.http
 
-frontend  ehoneah-frontend-http
-        bind *:80
-        mode http
-	http-request set-header X-Forwarded-Proto http
-        default_backend ehoneah-backend
+frontend myfrontend
+	bind *:80
+	bind *:443 ssl crt /etc/haproxy/certs/www.uniqueel.tech.pem
+	default_backend dasilva-backend
 
-frontend ehoneah-frontend-https
-	bind *:443 ssl crt /etc/haproxy/certs/www.ehoneah.tech.pem
-	http-request set-header X-Forwarded-Proto https
-	default_backend ehoneah-backend
-
-backend ehoneah-backend
-        balance roundrobin
-        server 63210-web-01 100.25.19.204:80 check
-        server 63210-web-02 54.157.159.85:80 check
+backend dasilva-backend
+	balance roundrobin
+	server web-01 54.144.46.99:80 check
+	server web-02 54.209.42.65:80 check	
